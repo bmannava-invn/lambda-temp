@@ -11,9 +11,22 @@ var ApiBuilder = require('claudia-api-builder'),
     module.exports = api;
 
 
+var db = (function(){
+    var ins;
+    function init(){
+        console.log('DB Connected.');
+        return {name : 'Bhas'}
+    }
+    return {
+        getConnection:function(){
+            return ins || (ins = init())
+        }
+    }
+})();
+
 api.get('/hello', function () {
     'use strict';
-    return '<html>hello world</html>';
+    return '<html>hello world</html>',db.getConnection().name;
 });
 
 api.get('/echo', function (request) {
@@ -45,7 +58,7 @@ api.post('/echo', function (request) {
     return request;
 });
 
-api.get('/connection',function(request){
+/*api.get('/connection',function(request){
     MongoClient.connect(url, function (err, db) {
         if (err) {
             return console.dir(err);
@@ -56,7 +69,7 @@ api.get('/connection',function(request){
         })
 
     });
-});
+});*/
 
 api.get('/start.html', function () {
     'use strict';
